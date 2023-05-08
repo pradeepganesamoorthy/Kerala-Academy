@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <data>
+
+        <record id="paperformat_certificate_report" model="report.paperformat">
+            <field name="name">Custom Paperformat Cerificate report</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="format">A5</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <record id="academy_certificate_print_badge" model="ir.actions.report">
+        <field name="name">Print Certificate</field>
+        <field name="model">kerala.academy</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">academy.qweb_certificate</field>
+        <field name="report_file">academy.qweb_certificate</field>
+        <field name="print_report_name">'Certificate'</field>
+        <field name="binding_model_id" ref="model_kerala_academy"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_certificate_report"/>
+    </record>
+
+        <template id="certificate_report_document">
+            <div class="page">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <img src="/academy/static/img/academy_icon.png" style="max-height:100px; width:10%"/><br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h2>Certificate of Completion</h2><br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center" style="font-size:16px">
+                        <p>This is to certificate is proudly presented to</p><br/>
+                        <p style="font-size:30px"><strong t-field="doc.student_id.name"/></p><br/>
+                        <p>has successfully completed the <strong t-field="doc.course_enrolled.course_name"/></p> <p> with Excellence Keep your Excellence and best of luck for your future</p><br/>
+                        <p>Issued on <strong t-esc="doc.get_today_date()"/>.</p>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-12 pull-right" style="font-size:16px">
+                      <img src="/academy/static/img/signature.png" style="max-height:60px; width:30%"/><br/>
+                        <p>Founder and CEO</p>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
+        <template id="qweb_certificate">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-if="doc.is_fully_paid">
+                        <t t-call="academy.certificate_report_document" t-lang="doc.student_id.lang"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

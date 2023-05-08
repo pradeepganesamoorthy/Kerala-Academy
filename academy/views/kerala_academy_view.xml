@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+         <record id="kerala_academy_tree_view" model="ir.ui.view">
+            <field name="name">kerala.academy.tree.view</field>
+            <field name="model">kerala.academy</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="academy_name"/>
+                    <field name="student_id"/>
+                    <field name="course_enrolled"/>
+                    <field name="total_fees"/>
+                    <field name="fees_paid"/>
+                    <field name="remaining_fees_to_pay"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="kerala_academy_form_view" model="ir.ui.view">
+            <field name="name">kerala.academy.form.view</field>
+            <field name="model">kerala.academy</field>
+            <field name="arch" type="xml">
+                <form string="Kerala Academy">
+                    <header>
+                        <button name="print_certificate" type="object" string="Print Certificate"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="academy_name"/>
+                                <field name="student_id"/>
+                                <field name="course_enrolled"/>
+                                <field name="is_fully_paid"/>
+                            </group>
+                            <group>
+                                <field name="total_fees" readonly="1"/>
+                                <field name="fees_paid"/>
+                                <field name="remaining_fees_to_pay"/>
+                                <field name="certificate_number" readonly="1" attrs="{'invisible': [('is_fully_paid', '=', False)]}"/>
+<!--                                <field name="certificate_number"/>-->
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="kerala_academy_search_view" model="ir.ui.view">
+            <field name="name">kerala.academy.view.search</field>
+            <field name="model">kerala.academy</field>
+            <field name="arch" type="xml">
+                <search string="Kerala Academy">
+                    <field name="student_id"/>
+                    <field name="certificate_number"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kerala_academy" model="ir.actions.act_window">
+           <field name="name">Kerala Academy</field>
+           <field name="res_model">kerala.academy</field>
+           <field name="context">{}</field>
+           <field name="domain">[]</field>
+           <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="kerala_academy_tree_view"/>
+           <field name="search_view_id" ref="kerala_academy_search_view"/>
+       </record>
+
+        <record id="sequence_kerala_academy_certificate_number" model="ir.sequence">
+            <field name="name">Kerala Academy Certificate Number</field>
+            <field name="code">kerala.academy</field>
+            <field name="prefix">KA-</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+
+        <menuitem id="kerala_academy_menu_root" name="Academy"
+                  sequence="7" groups="base.group_user" web_icon="academy,static/img/academy_icon.png"/>
+        <menuitem id="kerala_academy_sub_menu" parent= "kerala_academy_menu_root" sequence= "4" name= "Kerala Academy"/>
+        <menuitem id="kerala_academy_sub_sub_menu" name="Kerala Academy" parent="kerala_academy_sub_menu"
+                  action="action_kerala_academy" sequence="1"/>
+
+<!--        Course Master View-->
+        <record id="course_master_tree_view" model="ir.ui.view">
+            <field name="name">course.master.tree.view</field>
+            <field name="model">course.master</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="course_name"/>
+                    <field name="course_fee"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="course_master_form_view" model="ir.ui.view">
+            <field name="name">course.master.form.view</field>
+            <field name="model">course.master</field>
+            <field name="arch" type="xml">
+                <form string="Course">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="course_name"/>
+                            </group>
+                            <group>
+                                <field name="course_fee"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_course_master" model="ir.actions.act_window">
+           <field name="name">Course</field>
+           <field name="res_model">course.master</field>
+           <field name="context">{}</field>
+           <field name="domain">[]</field>
+           <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="course_master_tree_view"/>
+       </record>
+
+        <menuitem id="course_master_sub_sub_menu"
+        name="Courses"
+        sequence="2"
+        groups="base.group_user"
+        parent="kerala_academy_sub_menu"
+        action="action_course_master"/>
+
+    </data>
+</odoo>
